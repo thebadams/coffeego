@@ -20,3 +20,8 @@ RETURNING *;
 -- name: ListCoffees :many
 SELECT name from coffees
 ORDER BY name;
+
+
+-- name: FindRoasterByName :one
+SELECT * from roasters
+WHERE name = ? LIMIT 1;

@@ -21,7 +21,7 @@ RETURNING id, name, roaster_id
 
 type CreateCoffeeParams struct {
 	Name      string
-	RoasterID interface{}
+	RoasterID int64
 }
 
 func (q *Queries) CreateCoffee(ctx context.Context, arg CreateCoffeeParams) (Coffee, error) {
@@ -42,6 +42,18 @@ RETURNING id, name
 
 func (q *Queries) CreateRoaster(ctx context.Context, name string) (Roaster, error) {
 	row := q.db.QueryRowContext(ctx, createRoaster, name)
+	var i Roaster
+	err := row.Scan(&i.ID, &i.Name)
+	return i, err
+}
+
+const findRoasterByName = `-- name: FindRoasterByName :one
+SELECT id, name from roasters
+WHERE name = ? LIMIT 1
+`
+
+func (q *Queries) FindRoasterByName(ctx context.Context, name string) (Roaster, error) {
+	row := q.db.QueryRowContext(ctx, findRoasterByName, name)
 	var i Roaster
 	err := row.Scan(&i.ID, &i.Name)
 	return i, err

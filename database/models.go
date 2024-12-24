@@ -7,7 +7,7 @@ package database
 type Coffee struct {
 	ID        int64
 	Name      string
-	RoasterID interface{}
+	RoasterID int64
 }
 
 type Roaster struct {
