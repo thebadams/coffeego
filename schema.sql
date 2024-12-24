@@ -1,0 +1,13 @@
+CREATE TABLE coffees (
+id INTEGER PRIMARY KEY,
+name text NOT NULL,
+roaster_id INTEGER
+FOREIGN KEY(roaster_id) REFERENCES roasters(PrimaryKeyField)
+ON UPDATE CASCADE
+ON DELETE CASCADE
+)
+
+CREATE TABLE roasters (
+id INTEGER PRIMARY KEY,
+name text NOT NULL
+)
