@@ -60,23 +60,30 @@ func (q *Queries) FindRoasterByName(ctx context.Context, name string) (Roaster, 
 }
 
 const listCoffees = `-- name: ListCoffees :many
-SELECT name from coffees
-ORDER BY name
+SELECT c.name as coffee, r.name as roaster from coffees as c
+INNER JOIN roasters as r
+ON c.roaster_id=r.id
+ORDER BY c.name
 `
 
-func (q *Queries) ListCoffees(ctx context.Context) ([]string, error) {
+type ListCoffeesRow struct {
+	Coffee  string
+	Roaster string
+}
+
+func (q *Queries) ListCoffees(ctx context.Context) ([]ListCoffeesRow, error) {
 	rows, err := q.db.QueryContext(ctx, listCoffees)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []ListCoffeesRow
 	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
+		var i ListCoffeesRow
+		if err := rows.Scan(&i.Coffee, &i.Roaster); err != nil {
 			return nil, err
 		}
-		items = append(items, name)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

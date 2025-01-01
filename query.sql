@@ -18,8 +18,10 @@ RETURNING *;
 
 
 -- name: ListCoffees :many
-SELECT name from coffees
-ORDER BY name;
+SELECT c.name as coffee, r.name as roaster from coffees as c
+INNER JOIN roasters as r
+ON c.roaster_id=r.id
+ORDER BY c.name;
 
 
 -- name: FindRoasterByName :one

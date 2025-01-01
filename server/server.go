@@ -28,9 +28,8 @@ func CreateServer() *application {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/{$}", app.home)
 	mux.HandleFunc("GET /coffee", app.getCoffee)
-	mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World"))
-	})
+
+	mux.HandleFunc("POST /coffee", app.postCoffee)
 
 	srv := http.Server{Addr: ":4000", Handler: mux}
 	app.server = &srv
