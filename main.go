@@ -34,8 +34,8 @@ func main() {
 		}
 
 	}
-	server.StartServer()
-
+	app := server.CreateServer()
+	app.StartServer()
 }
 
 //go:embed schema.sql
