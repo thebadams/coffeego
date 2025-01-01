@@ -12,6 +12,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/thebadams/coffeego/database"
+	"github.com/thebadams/coffeego/server"
 )
 
 type Coffee struct {
@@ -33,6 +34,7 @@ func main() {
 		}
 
 	}
+	server.StartServer()
 
 }
 
