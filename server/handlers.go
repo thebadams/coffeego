@@ -31,19 +31,24 @@ func (app *application) getCoffee(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("sqlite3", "./coffeego.db")
 	if err != nil {
 		app.logger.Error("Error opening database", slog.String("ERROR", err.Error()))
-
+		app.serverError(w, r, err)
 	}
 
 	queries := database.New(db)
 	coffees, err := queries.ListCoffees(ctx)
 	if err != nil {
 		app.logger.Error("Error Getting Coffees", slog.String("ERROR", err.Error()))
+		app.serverError(w, r, err)
 
 	}
 
 	app.logger.Info("Coffees Found", slog.Any("Coffees", coffees))
 	payload := GetCoffeePayload{StatusCode: http.StatusOK, Success: true, Data: coffees, Message: msg}
 	j, err := json.Marshal(payload)
+	if err != nil {
+		app.serverError(w, r, err)
+
+	}
 	w.Write(j)
 
 }
